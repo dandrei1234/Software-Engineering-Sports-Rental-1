@@ -1,0 +1,2 @@
+• Add image for equipment_tbl in AddEquipment.jsx
+• Remove time in dates of Rentals.jsx

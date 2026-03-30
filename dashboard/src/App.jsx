@@ -12,6 +12,7 @@ import Rentals from './pages/Rentals';
 import AuditLog from './pages/AuditLog';
 
 import Test from './pages/insert/Test';
+import SearchEquipment from './pages/insert/SearchEquipment';
 
 import './App.css'; 
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/audit-log" element={<AuditLog />} />
 
           <Route path="/popup" element={<Test />} />
+          <Route path="/search-equipment" element={<SearchEquipment />} />
 
 
           <Route 

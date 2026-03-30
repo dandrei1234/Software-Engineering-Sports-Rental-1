@@ -4,6 +4,7 @@ const equipmentMethods = require('./equipmentMethods');
 
 router.get('/get-categories', equipmentMethods.getCategories);
 router.post('/add', equipmentMethods.addEquipment);
+router.post('/search', equipmentMethods.searchEquipment);
 
 module.exports = router;
 

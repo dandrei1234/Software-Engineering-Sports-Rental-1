@@ -1,2 +1,6 @@
 • Add image for equipment_tbl in AddEquipment.jsx
 • Remove time in dates of Rentals.jsx
+
+• In MySQL, in "PROCEDURE AddEquipment" > INSERT INTO rentals_tbl >
+    - Change userID from 1 to logged in user id
+    - Add parameter "IN userID" to "CREATE PROCEDURE AddEquipment"

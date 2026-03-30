@@ -2,9 +2,9 @@ import React, { useState, useEffect, use } from 'react';
 import axios from 'axios';
 import { CardContent, CardHeader, TextField, Autocomplete, Button } from '@mui/material';
 
-import { StyledCard, FormContainer, ActionBox } from '../Styles';
+import { StyledCard, FormContainer, ActionBox } from '../../Styles';
 
-const AddEquipment = () => {
+const AddEquipment = ({close, displaySuccessMessage, displayErrorMessage}) => {
     const [formData, setFormData] = useState({
         name: '',
         quantity: 0,
@@ -16,7 +16,7 @@ const AddEquipment = () => {
     const [categoryNames, setCategoryNames] = useState([]);
 
     useEffect(() => {
-            getCategories();
+        getCategories();
     }, []);
 
     const handleChange = (e) => {
@@ -37,20 +37,12 @@ const AddEquipment = () => {
                 setCategoryNames(names);
             })
             .catch((error) => {
-                    console.error(error);
+                console.error(error);
             });
     }
 
-
-        
     const createEquipment = async () => {
         try {
-          const body = {
-                equipment_name: formData.name,
-                categoryID: formData.categoryId,
-                quantity: formData.quantity,
-                description: formData.description
-            };
 
             const response = await axios.post('http://localhost:1337/equipment/add', {
                 equipment_name: formData.name,
@@ -58,18 +50,17 @@ const AddEquipment = () => {
                 quantity: formData.quantity,
                 description: formData.description
             });
-            // setUsername('');
-            // setPassword('');
+            displaySuccessMessage("Add Equipment Success", "Equipment added successfully");
 
-            // navigate("/");
 
         } catch (error) {
-            alert(error.response.data.message || "Registration failed");
+            displayErrorMessage("Add Equipment Failed", error.response.data.message || "Add Equipment failed");
+            //alert(error.response.data.message || "Add Equipment failed");
         }
     };
 
     return (
-        <StyledCard>
+        <StyledCard sx={{ minWidth: '500px', margin: '0 auto' }}>
             <CardHeader 
                     title="Add Equipment" 
                     sx={{ textAlign: 'center', borderBottom: '1px solid #eee' }} 
@@ -126,7 +117,10 @@ const AddEquipment = () => {
 
                     <ActionBox>
                         <Button variant="contained" size="large" onClick={() => createEquipment()}>
-                                Add Equipment
+                            Add Equipment
+                        </Button>
+                        <Button size="large" onClick={close}>
+                            Cancel
                         </Button>
                     </ActionBox>
                 </FormContainer>

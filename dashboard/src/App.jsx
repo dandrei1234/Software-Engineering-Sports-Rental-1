@@ -7,9 +7,11 @@ import StaffDashboard from './pages/StaffDashboard';
 
 import Styles from './Styles'; 
 import Navbar from './pages/Navbar'; 
-import AddEquipment from './pages/AddEquipment';
+import AddEquipment from './pages/insert/AddEquipment';
 import Rentals from './pages/Rentals';
 import AuditLog from './pages/AuditLog';
+
+import Test from './pages/insert/Test';
 
 import './App.css'; 
 
@@ -40,6 +42,8 @@ function App() {
           <Route path="/add-equipment" element={<AddEquipment />} />
           <Route path="/rentals" element={<Rentals />} />
           <Route path="/audit-log" element={<AuditLog />} />
+
+          <Route path="/popup" element={<Test />} />
 
 
           <Route 

@@ -75,8 +75,6 @@ const SearchEquipment = () => {
 
   return (
     <>
-    {searchedRows.length > 0? searchedRows.length : 0}
-    
     <Box>
       <Card>
         <CardContent>

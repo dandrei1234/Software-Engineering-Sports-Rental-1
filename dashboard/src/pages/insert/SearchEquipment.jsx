@@ -75,7 +75,7 @@ const SearchEquipment = () => {
 
   return (
     <>
-    <Box>
+    <Box sx={{width: '600px'}}>
       <Card>
         <CardContent>
           <Box

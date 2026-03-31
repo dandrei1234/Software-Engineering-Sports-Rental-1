@@ -8,9 +8,9 @@ app.use(express.json());
 
 // ****************
 
-// const userRoutes = require('./users/userRoutes');
-// userRoutes.setPool(database.pool);
-// app.use('/users', userRoutes);
+const userRoutes = require('./users/userRoutes');
+userRoutes.setPool(database.pool);
+app.use('/users', userRoutes);
 
 // ****************
 

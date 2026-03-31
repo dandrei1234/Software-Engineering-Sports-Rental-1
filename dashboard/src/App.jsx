@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/LoginForm'; 
-import RegisterForm from './pages/RegisterForm'; 
+// import Login from './pages/LoginForm'; 
+// import RegisterForm from './pages/RegisterForm'; 
 import StudentDashboard from './pages/StudentDashboard'; 
 import StaffDashboard from './pages/StaffDashboard'; 
 
 import Styles from './Styles'; 
+
+
+import Login from './pages/user/Login';
+import Signup from './pages/user/Signup';
+
 import Navbar from './pages/Navbar'; 
 import AddEquipment from './pages/insert/AddEquipment';
 import Rentals from './pages/Rentals';
@@ -35,9 +40,14 @@ function App() {
       <div className="App">
         <Routes>
           {/* Redirect to dashboard if already logged in */}
-          <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login setUser={setUser} />} />
-          <Route path="/register" element={<RegisterForm />} />
+          {/* <Route path="/" element={user ? <Navigate to="/dashboard" /> : <Login setUser={setUser} />} /> */}
 
+          <Route path="/" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+
+
+
+          {/* <Route path="/register" element={<Register />} /> */}
 
           <Route path="/navbar" element={<Navbar />} />
           <Route path="/add-equipment" element={<AddEquipment />} />

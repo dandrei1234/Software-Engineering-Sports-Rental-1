@@ -1,34 +1,35 @@
 const bcrypt = require('bcrypt');
+
 const saltRounds = 10;
 exports.pool = null;
 
 exports.login = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!username || !password) {
+    if (!email || !password) {
         return res.status(400).json({ message: "Username and password are required" });
     }
 
     try {
-        const [rows] = await exports.pool.execute('CALL GetStaffPasswordByUsername(?)', [username]);
+        const [rows] = await exports.pool.execute('SELECT email, password FROM users_tbl WHERE email=?', [email]);
 
         if (rows[0].length === 0) {
-            return res.status(401).json({ message: "Invalid username or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        const receivedPassword = rows[0][0]['Password'];
+        const selectedPassword = rows[0].password;
 
-        console.log("Comparison: " + password + " vs " + receivedPassword);
+        console.log("Comparison: " + password + " vs " + selectedPassword);
 
-        const isMatch = await bcrypt.compare(password, receivedPassword);
+        const isMatch = await bcrypt.compare(password, selectedPassword);
 
         if (!isMatch) {
-            return res.status(401).json({ message: "Invalid username or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         res.status(200).json({
             message: "Login successful",
-            username: username
+            username: email
         });
 
         
@@ -41,33 +42,46 @@ exports.login = async (req, res) => {
 };
 
 exports.signUp = async (req, res) => {
-    const { username, password } = req.body;
+    const { name, email, password } = req.body;
+    console.log("Ran");
+    console.log("Name: " + name);
+    console.log("Email: " + email);
+    console.log("Password: " + password);
 
-    if (!username || !password) {
-        return res.status(400).json({ message: "Username and password are required" });
+
+    if (!name || !email || !password) {
+        return res.status(400).json({ message: "Incomplete user information" });
     }
+    const simplifiedName = name.trim().toLowerCase();
 
     try {
-        const [existingUser] = await exports.pool.execute(
-            'SELECT CountStaffByUsername(?) AS value',
-            [username]
+        let [matchedUserCount] = await exports.pool.execute(
+            'SELECT COUNT(email) FROM users_tbl WHERE email=?',
+            [email]
         );
+        if (matchedUserCount[0].value > 0) {
+            return res.status(400).json({ message: "Email already exists" });
+        }
 
-        if (existingUser[0].value > 0) {
-            return res.status(400).json({ message: "Username is already taken" });
+        [matchedUserCount] = await exports.pool.execute(
+            'SELECT COUNT(fullname) FROM users_tbl WHERE fullname=?',
+            [simplifiedName]
+        );
+        if (matchedUserCount[0].value > 0) {
+            return res.status(400).json({ message: "Name already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         await exports.pool.execute(
-            'CALL CreateStaff(?, ?, "", "", "")',
-            [username, hashedPassword]
+            'INSERT INTO users_tbl (fullname, email, password) VALUES (?, ?, ?);',
+            [name.trim(), email, hashedPassword]
         );
 
-        res.status(201).json({ message: "User registered successfully!" });
+        res.status(201).json({ message: "User was signed up successfully!" });
 
     } catch (error) {
-        console.error("Registration Error:", error);
-        res.status(500).json({ message: "Error registering user", details: error.message });
+        console.error("Signup Error:", error);
+        res.status(500).json({ message: "Error signing up user", details: error.message });
     }
 };

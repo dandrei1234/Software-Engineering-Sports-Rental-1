@@ -3,7 +3,7 @@ const router = express.Router();
 const userMethods = require('./userMethods');
 
 router.post('/login', userMethods.login);
-router.post('/register', userMethods.signUp);
+router.post('/signup', userMethods.signUp);
 
 module.exports = router;
 
